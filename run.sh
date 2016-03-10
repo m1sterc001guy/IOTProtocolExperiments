@@ -1,1 +1,1 @@
-java -cp ./log/:./jars/org.eclipse.paho.client.mqttv3-1.0.2.jar:./jars/log4j-1.2.17.jar:./jars/rabbitmq-java-client-bin-3.6.0/*:./target/GatewayProtocols-1.0-SNAPSHOT.jar networks.finalproject.RunClient $1 test 192.168.1.228 $2
+java -cp ./log/:./jars/xmpp-extensions-0.6.2.jar:./jars/xmpp-core-client-0.6.2.jar:./jars/xmpp-core-0.6.2.jar:./jars/xmpp-addr-0.6.2.jar:./jars/org.eclipse.paho.client.mqttv3-1.0.2.jar:./jars/log4j-1.2.17.jar:./jars/rabbitmq-java-client-bin-3.6.0/*:./target/GatewayProtocols-1.0-SNAPSHOT.jar networks.finalproject.RunClient $1 $2 justinsdell $3

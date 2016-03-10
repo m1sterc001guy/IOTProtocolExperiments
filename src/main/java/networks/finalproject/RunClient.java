@@ -19,17 +19,22 @@ public class RunClient {
     String topic = "tigers";
 
     // begin experiments
+    // username: test, password: test
     //IPubSub protocol = new AMQPPubSub(username, password, brokerHost, "pubsub");
-    IPubSub protocol = new MQTTPubSub(username, brokerHost, 2);
+    // username: doesn't matter, just needs to be different from other client
+    //IPubSub protocol = new MQTTPubSub(username, brokerHost, 2);
+    // TODO: Is there a way to send a message to a group?
+    // username: raspberrypi, password: raspberrypi
+    // username: tigers, password: raspberrypi2
+    IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
     protocol.connectToBroker();
 
-    if (!isSubscriber) {
+    if (isSubscriber) {
       protocol.subscribe(topic);
     } else {
       protocol.publish("Tigers are cool!", topic);
       protocol.close();
     }
-
   }
 
 }
