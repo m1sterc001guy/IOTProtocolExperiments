@@ -1,0 +1,1 @@
+java -cp ./jars/xmpp-addr-0.6.2.jar:./jars/xmpp-extensions-0.6.2.jar:./jars/xmpp-core-0.6.2.jar:./jars/xmpp-core-client-0.6.2.jar:./target/GatewayProtocols-1.0-SNAPSHOT.jar networks.finalproject.XmppPublish

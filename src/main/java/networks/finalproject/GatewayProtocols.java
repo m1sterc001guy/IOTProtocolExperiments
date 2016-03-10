@@ -15,7 +15,7 @@ public class GatewayProtocols {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setUsername("test");
     factory.setPassword("test");
-    factory.setHost("192.168.1.152");
+    factory.setHost("192.168.1.228");
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
 
