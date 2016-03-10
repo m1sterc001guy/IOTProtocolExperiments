@@ -43,6 +43,7 @@ public class AMQPPubSub implements IPubSub {
       log.error("IOException occurred when connecting to broker.", e);
       return false;
     }
+    log.debug("AMQP connected to broker.");
     return true;  
   }
 
@@ -86,6 +87,7 @@ public class AMQPPubSub implements IPubSub {
     } catch (IOException e) {
       log.error("IOException occurred when closing connection.", e);
     }
+    log.debug("AMQP client disconnected from broker.");
   }
 
 }

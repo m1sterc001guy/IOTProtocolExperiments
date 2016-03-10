@@ -4,6 +4,7 @@ networks/finalproject/AMQPPubSub$1.class
 networks/finalproject/MqttPublish.class
 networks/finalproject/XmppPublish.class
 networks/finalproject/IPubSub.class
+networks/finalproject/MQTTPubSub.class
 networks/finalproject/RunClient.class
 networks/finalproject/AMQPPubSub.class
 networks/finalproject/GatewayProtocols.class

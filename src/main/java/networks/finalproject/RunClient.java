@@ -19,7 +19,8 @@ public class RunClient {
     String topic = "tigers";
 
     // begin experiments
-    IPubSub protocol = new AMQPPubSub(username, password, brokerHost, "pubsub");
+    //IPubSub protocol = new AMQPPubSub(username, password, brokerHost, "pubsub");
+    IPubSub protocol = new MQTTPubSub(username, brokerHost, 2);
     protocol.connectToBroker();
 
     if (!isSubscriber) {

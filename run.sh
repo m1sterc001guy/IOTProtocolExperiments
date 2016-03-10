@@ -1,1 +1,1 @@
-java -cp ./log/:./jars/log4j-1.2.17.jar:./jars/rabbitmq-java-client-bin-3.6.0/*:./target/GatewayProtocols-1.0-SNAPSHOT.jar networks.finalproject.RunClient test test 192.168.1.228 $1
+java -cp ./log/:./jars/org.eclipse.paho.client.mqttv3-1.0.2.jar:./jars/log4j-1.2.17.jar:./jars/rabbitmq-java-client-bin-3.6.0/*:./target/GatewayProtocols-1.0-SNAPSHOT.jar networks.finalproject.RunClient $1 test 192.168.1.228 $2
