@@ -1,12 +1,14 @@
 networks/finalproject/CoapPublish.class
 networks/finalproject/XmppPublish$1.class
 networks/finalproject/AMQPPubSub$1.class
-networks/finalproject/MqttPublish.class
+networks/finalproject/CoapSubscribe$1.class
 networks/finalproject/XmppPublish.class
 networks/finalproject/IPubSub.class
 networks/finalproject/XMPPPubSub.class
 networks/finalproject/MQTTPubSub.class
 networks/finalproject/RunClient.class
 networks/finalproject/AMQPPubSub.class
+networks/finalproject/CoapSubscribe.class
 networks/finalproject/GatewayProtocols.class
+networks/finalproject/MqttPublish.class
 networks/finalproject/XMPPPubSub$1.class
