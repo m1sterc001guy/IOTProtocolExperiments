@@ -26,7 +26,8 @@ public class RunClient {
     // TODO: Is there a way to send a message to a group?
     // username: raspberrypi, password: raspberrypi
     // username: tigers, password: raspberrypi2
-    IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
+    //IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
+    IPubSub protocol = new COAPPubSub(brokerHost);
     protocol.connectToBroker();
 
     if (isSubscriber) {
