@@ -1,12 +1,17 @@
 package networks.finalproject;
 
-import org.apache.log4j.Logger;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.security.SecureRandom;
+import java.lang.StringBuilder;
+
+import org.apache.log4j.Logger;
 
 public class RunClient {
 
   static Logger log = Logger.getLogger(RunClient.class.getName());
+  static final String letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYXabcdefghijklmnopqrstuvwxyz";
+  static SecureRandom rnd = new SecureRandom();
 
   public static void main(String[] args) {
     if (args.length != 2) {
@@ -41,7 +46,8 @@ public class RunClient {
     if (isSubscriber) {
       protocol.subscribe(topic);
     } else {
-      protocol.publish("MY MESSAGE", topic);
+      String message = getRandomMessage(10);
+      protocol.publish(message, topic);
       protocol.close();
     }
     
@@ -49,6 +55,14 @@ public class RunClient {
     // username: raspberrypi, password: raspberrypi
     // username: tigers, password: raspberrypi2
     //IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
+  }
+
+  private static String getRandomMessage(int length) {
+    StringBuilder sb = new StringBuilder(length);
+    for (int i = 0; i < length; i++) {
+      sb.append(letters.charAt(rnd.nextInt(letters.length())));
+    }
+    return sb.toString();
   }
 
 }
