@@ -1,9 +1,12 @@
 package networks.finalproject;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.text.SimpleDateFormat;
 import java.security.SecureRandom;
 import java.lang.StringBuilder;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -12,6 +15,8 @@ public class RunClient {
   static Logger log = Logger.getLogger(RunClient.class.getName());
   static final String letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYXabcdefghijklmnopqrstuvwxyz";
   static SecureRandom rnd = new SecureRandom();
+
+  private static IPubSub protocol = null;
 
   public static void main(String[] args) {
     if (args.length != 2) {
@@ -22,8 +27,7 @@ public class RunClient {
     String protocolType = args[0];
     boolean isSubscriber = Boolean.parseBoolean(args[1]);
     String brokerHost = "192.168.1.126";
-    IPubSub protocol = null;
-    String topic = "topic";
+    final String topic = "topic";
     //String topic = "tigers";
 
     if (protocolType.equals("amqp")) {
@@ -46,8 +50,24 @@ public class RunClient {
     if (isSubscriber) {
       protocol.subscribe(topic);
     } else {
-      String message = getRandomMessage(10);
-      protocol.publish(message, topic);
+      final String message = getRandomMessage(10);
+      Timer timer = new Timer();
+      timer.scheduleAtFixedRate(new TimerTask() {
+        @Override
+        public void run() {
+          protocol.publish(message, topic);
+        }
+      }, 0, 1000);
+
+      log.debug("Press enter to exit");
+      try {
+        System.in.read();
+      } catch (IOException e) {
+        log.error("IOException occurred when reading from the console.", e);
+      }
+
+      timer.cancel();
+
       protocol.close();
     }
     
