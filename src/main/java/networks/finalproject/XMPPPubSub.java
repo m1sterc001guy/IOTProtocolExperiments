@@ -67,7 +67,7 @@ public class XMPPPubSub implements IPubSub {
 
   @Override
   public boolean publish(String message, String topic) {
-    log.debug("Sending message...");
+    //log.debug("Sending message...");
     // send a message to the "topic", which is really just a user
     xmppClient.send(new Message(new Jid(topic, brokerHost, "xmpp"), Message.Type.CHAT, message, topic));
     return true;
@@ -85,8 +85,6 @@ public class XMPPPubSub implements IPubSub {
       log.debug("XMPP Listening for message...");
       log.debug("Press enter to exit.");
 
-      //publish("Tigers are cool.", "Tigers");
-      
       System.in.read();
     } catch (XmppException e) {
       log.error("XMPPException occurred when connecting to broker.", e);

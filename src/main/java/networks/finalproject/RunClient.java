@@ -32,7 +32,6 @@ public class RunClient {
 
     String brokerHost = "192.168.1.228";
     final String topic = "topic";
-    //String topic = "tigers";
 
     if (protocolType.equals("amqp")) {
       protocol = new AMQPPubSub("test", "test", brokerHost, "pubsub");
@@ -40,7 +39,11 @@ public class RunClient {
       String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
       protocol = new MQTTPubSub(timestamp, brokerHost, 2);
     } else if (protocolType.equals("xmpp")) {
-      log.debug("TODO: DEBUG XMPP");
+      if (isSubscriber) {
+        protocol = new XMPPPubSub("topic", "topic", "justinsdell", isSubscriber);
+      } else {
+        protocol = new XMPPPubSub("raspberrypi", "raspberrypi", "justinsdell", isSubscriber);
+      }
     } else if (protocolType.equals("coap")) {
       protocol = new COAPPubSub(brokerHost);
     } else {
@@ -51,12 +54,20 @@ public class RunClient {
     protocol.connectToBroker();
 
     telemetryPattern(isSubscriber, topic, timeInterval, messageSize);
+    //sendOneMessage(isSubscriber, topic, messageSize); 
     
     
     // TODO: Is there a way to send a message to a group?
-    // username: raspberrypi, password: raspberrypi
-    // username: tigers, password: raspberrypi2
-    //IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
+  }
+
+  private static void sendOneMessage(boolean isSubscriber, String topic, int messageSize) {
+    if (isSubscriber) {
+      protocol.subscribe(topic);
+    } else {
+      String message = getRandomMessage(messageSize);
+      protocol.publish(message, topic);
+      protocol.close();
+    }
   }
 
   private static void telemetryPattern(boolean isSubscriber, String topic, int timeInterval, int messageSize) {
