@@ -31,6 +31,7 @@ public class RunClient {
 
 
     String brokerHost = "192.168.1.228";
+    String brokerHostName = "justinsdell";
     final String topic = "topic";
 
     if (protocolType.equals("amqp")) {
@@ -39,10 +40,11 @@ public class RunClient {
       String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
       protocol = new MQTTPubSub(timestamp, brokerHost, 2);
     } else if (protocolType.equals("xmpp")) {
+      // the broker host here must be the HOSTNAME, not the ip address
       if (isSubscriber) {
-        protocol = new XMPPPubSub("topic", "topic", "justinsdell", isSubscriber);
+        protocol = new XMPPPubSub("topic", "topic", brokerHostName, isSubscriber);
       } else {
-        protocol = new XMPPPubSub("raspberrypi", "raspberrypi", "justinsdell", isSubscriber);
+        protocol = new XMPPPubSub("raspberrypi", "raspberrypi", brokerHostName, isSubscriber);
       }
     } else if (protocolType.equals("coap")) {
       protocol = new COAPPubSub(brokerHost);
