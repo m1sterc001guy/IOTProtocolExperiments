@@ -19,14 +19,18 @@ public class RunClient {
   private static IPubSub protocol = null;
 
   public static void main(String[] args) {
-    if (args.length != 2) {
+    if (args.length != 4) {
       log.error("Insufficient number of arguments. Quitting...");
       System.exit(-1);
     }
 
     String protocolType = args[0];
     boolean isSubscriber = Boolean.parseBoolean(args[1]);
-    String brokerHost = "192.168.1.126";
+    int timeInterval = Integer.parseInt(args[2]);
+    int messageSize = Integer.parseInt(args[3]);
+
+
+    String brokerHost = "192.168.1.228";
     final String topic = "topic";
     //String topic = "tigers";
 
@@ -38,8 +42,7 @@ public class RunClient {
     } else if (protocolType.equals("xmpp")) {
       log.debug("TODO: DEBUG XMPP");
     } else if (protocolType.equals("coap")) {
-      // TODO: change this back to broker host
-      protocol = new COAPPubSub("192.168.1.105");
+      protocol = new COAPPubSub(brokerHost);
     } else {
       log.debug("Unknown Protocol. Quitting...");
       System.exit(-1);
@@ -47,17 +50,27 @@ public class RunClient {
     
     protocol.connectToBroker();
 
+    telemetryPattern(isSubscriber, topic, timeInterval, messageSize);
+    
+    
+    // TODO: Is there a way to send a message to a group?
+    // username: raspberrypi, password: raspberrypi
+    // username: tigers, password: raspberrypi2
+    //IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
+  }
+
+  private static void telemetryPattern(boolean isSubscriber, String topic, int timeInterval, int messageSize) {
     if (isSubscriber) {
       protocol.subscribe(topic);
     } else {
-      final String message = getRandomMessage(10);
+      final String message = getRandomMessage(messageSize);
       Timer timer = new Timer();
       timer.scheduleAtFixedRate(new TimerTask() {
         @Override
         public void run() {
           protocol.publish(message, topic);
         }
-      }, 0, 1000);
+      }, 0, timeInterval);
 
       log.debug("Press enter to exit");
       try {
@@ -70,11 +83,6 @@ public class RunClient {
 
       protocol.close();
     }
-    
-    // TODO: Is there a way to send a message to a group?
-    // username: raspberrypi, password: raspberrypi
-    // username: tigers, password: raspberrypi2
-    //IPubSub protocol = new XMPPPubSub(username, password, brokerHost, isSubscriber);
   }
 
   private static String getRandomMessage(int length) {

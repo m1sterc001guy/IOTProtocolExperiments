@@ -1,14 +1,26 @@
-AMQP connected to broker.
+MQTT Connected to broker.
 Press enter to exit
-AMQP client disconnected from broker.
-D'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
-Received 'topic':'9uB27xhUuD'
+Received 'topic':'m63XPVMQTT DReceived 'topic':'MQTT DeliverReceived 'toMQTT Delivery CompReceivMQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Delivery Complete.
+MQTT Client disconnected from broker.
+3XPVy8Kn'
+Received 'topic':'m63XPVy8Kn'
+Received 'topic':'m63XPVy8Kn'
+Received 'topic':'m63XPVy8Kn'

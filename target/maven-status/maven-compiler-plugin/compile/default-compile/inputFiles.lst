@@ -1,4 +1,7 @@
-/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/CoapPublish.java
-/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/XmppPublish.java
-/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/MqttPublish.java
-/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/GatewayProtocols.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/RunClient.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/XMPPPubSub.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/CoapTopicServer.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/MQTTPubSub.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/AMQPPubSub.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/IPubSub.java
+/home/pi/java_programs/GatewayProtocols/GatewayProtocols/src/main/java/networks/finalproject/COAPPubSub.java
