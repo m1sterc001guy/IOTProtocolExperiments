@@ -17,9 +17,10 @@ public class RunClient {
   static SecureRandom rnd = new SecureRandom();
 
   private static IPubSub protocol = null;
+  private static boolean keepSendingMessages = true;
 
   public static void main(String[] args) {
-    if (args.length != 4) {
+    if (args.length != 5) {
       log.error("Insufficient number of arguments. Quitting...");
       System.exit(-1);
     }
@@ -28,6 +29,7 @@ public class RunClient {
     boolean isSubscriber = Boolean.parseBoolean(args[1]);
     int timeInterval = Integer.parseInt(args[2]);
     int messageSize = Integer.parseInt(args[3]);
+    int totalTime = Integer.parseInt(args[4]);
 
 
     String brokerHost = "192.168.1.228";
@@ -55,11 +57,30 @@ public class RunClient {
     
     protocol.connectToBroker();
 
-    telemetryPattern(isSubscriber, topic, timeInterval, messageSize);
+    //telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
     //sendOneMessage(isSubscriber, topic, messageSize); 
-    
-    
-    // TODO: Is there a way to send a message to a group?
+    sendMessages(isSubscriber, topic, messageSize, totalTime);
+  }
+
+  private static void sendMessages(boolean isSubscriber, String topic, int messageSize, int totalTime) {
+    if (isSubscriber) {
+      protocol.subscribe(topic);
+    } else {
+      final String message = getRandomMessage(messageSize);
+      Timer timer = new Timer();
+      timer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+          keepSendingMessages = false;
+        }
+      }, totalTime * 1000);
+
+      while (keepSendingMessages) {
+        protocol.publish(message, topic);
+      }
+
+      protocol.close();
+    }
   }
 
   private static void sendOneMessage(boolean isSubscriber, String topic, int messageSize) {
@@ -72,7 +93,7 @@ public class RunClient {
     }
   }
 
-  private static void telemetryPattern(boolean isSubscriber, String topic, int timeInterval, int messageSize) {
+  private static void telemetryPattern(boolean isSubscriber, String topic, int timeInterval, int messageSize, int totalTime) {
     if (isSubscriber) {
       protocol.subscribe(topic);
     } else {
@@ -85,16 +106,14 @@ public class RunClient {
         }
       }, 0, timeInterval);
 
-      log.debug("Press enter to exit");
-      try {
-        System.in.read();
-      } catch (IOException e) {
-        log.error("IOException occurred when reading from the console.", e);
-      }
 
-      timer.cancel();
-
-      protocol.close();
+      timer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+          timer.cancel();
+          protocol.close();
+        }
+      }, totalTime * 1000);
     }
   }
 
