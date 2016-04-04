@@ -67,7 +67,7 @@ public class RunClient {
     //telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
     //sendOneMessage(isSubscriber, topic, messageSize); 
     //sendMessages(isSubscriber, topic, messageSize, totalTime);
-    onOffModel(isSubscriber, topic, messageSize, totalTime, 300, 300);
+    onOffModel(isSubscriber, topic, messageSize, totalTime, 300 * 1000, 300 * 1000);
   }
 
   private static void onOffModel(boolean isSubscriber, String topic, int messageSize, int totalTime, int onInterval, int offInterval) throws InterruptedException {
@@ -89,16 +89,22 @@ public class RunClient {
       switchToOffTask = new TimerTask() {
         @Override
         public void run() {
-          isSwitchOn = false;
-          flipTimer.schedule(switchToOnTask, offInterval);
+          if (keepSendingMessages) {
+            isSwitchOn = false;
+            flipTimer.cancel();
+            flipTimer.schedule(switchToOnTask, offInterval);
+          }
         }
       };
 
       switchToOnTask = new TimerTask() {
         @Override
         public void run() {
-          isSwitchOn = true;
-          flipTimer.schedule(switchToOffTask, onInterval);
+          if (keepSendingMessages) {
+            isSwitchOn = true;
+            flipTimer.cancel();
+            flipTimer.schedule(switchToOffTask, onInterval);
+          }
         }
       };
 
