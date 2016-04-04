@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.security.SecureRandom;
 import java.lang.StringBuilder;
 import java.io.IOException;
+import java.lang.Thread;
+import java.lang.InterruptedException;
 
 import org.apache.log4j.Logger;
 
@@ -18,9 +20,13 @@ public class RunClient {
 
   private static IPubSub protocol = null;
   private static boolean keepSendingMessages = true;
+  private static boolean isSwitchOn = true;
   private static long totalDataSent = 0;
 
-  public static void main(String[] args) {
+  private static TimerTask switchToOnTask;
+  private static TimerTask switchToOffTask;
+
+  public static void main(String[] args) throws InterruptedException {
     if (args.length != 5) {
       log.error("Insufficient number of arguments. Quitting...");
       System.exit(-1);
@@ -60,7 +66,58 @@ public class RunClient {
 
     //telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
     //sendOneMessage(isSubscriber, topic, messageSize); 
-    sendMessages(isSubscriber, topic, messageSize, totalTime);
+    //sendMessages(isSubscriber, topic, messageSize, totalTime);
+    onOffModel(isSubscriber, topic, messageSize, totalTime, 300, 300);
+  }
+
+  private static void onOffModel(boolean isSubscriber, String topic, int messageSize, int totalTime, int onInterval, int offInterval) throws InterruptedException {
+    if (isSubscriber) {
+      protocol.subscribe(topic);
+    } else {
+      final String message = getRandomMessage(messageSize);
+
+      // schedule timers here
+      Timer stopTimer = new Timer();
+      stopTimer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+          keepSendingMessages = false;
+        }
+      }, totalTime * 1000);
+
+      Timer flipTimer = new Timer();
+      switchToOffTask = new TimerTask() {
+        @Override
+        public void run() {
+          isSwitchOn = false;
+          flipTimer.schedule(switchToOnTask, offInterval);
+        }
+      };
+
+      switchToOnTask = new TimerTask() {
+        @Override
+        public void run() {
+          isSwitchOn = true;
+          flipTimer.schedule(switchToOffTask, onInterval);
+        }
+      };
+
+      flipTimer.schedule(switchToOffTask, onInterval);
+
+      while(keepSendingMessages) {
+        if (isSwitchOn) {
+          totalDataSent += message.length();
+          protocol.publish(message, topic);
+        } else {
+          // sleep for a period of time to not waste CPU
+          long sleepTime = (long) (offInterval / 10);
+          Thread.sleep(sleepTime);
+        }
+      }
+      protocol.close();
+      log.debug("Total Data Sent: " + totalDataSent);
+
+    }
   }
 
   private static void sendMessages(boolean isSubscriber, String topic, int messageSize, int totalTime) {
@@ -86,6 +143,7 @@ public class RunClient {
     }
   }
 
+  // use for debugging
   private static void sendOneMessage(boolean isSubscriber, String topic, int messageSize) {
     if (isSubscriber) {
       protocol.subscribe(topic);
@@ -100,6 +158,7 @@ public class RunClient {
     if (isSubscriber) {
       protocol.subscribe(topic);
     } else {
+      // TODO: add total data sent here
       final String message = getRandomMessage(messageSize);
       Timer timer = new Timer();
       timer.scheduleAtFixedRate(new TimerTask() {

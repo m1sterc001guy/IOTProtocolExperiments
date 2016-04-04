@@ -9,6 +9,9 @@ networks/finalproject/RunClient.class
 networks/finalproject/AMQPPubSub.class
 networks/finalproject/COAPPubSub$1.class
 networks/finalproject/RunClient$1.class
+networks/finalproject/RunClient$5.class
+networks/finalproject/RunClient$6.class
+networks/finalproject/RunClient$4.class
 networks/finalproject/CoapTopicServer.class
 networks/finalproject/RunClient$3.class
 networks/finalproject/XMPPPubSub$1.class
