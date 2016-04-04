@@ -37,6 +37,7 @@ public class RunClient {
     int timeInterval = Integer.parseInt(args[2]);
     int messageSize = Integer.parseInt(args[3]);
     int totalTime = Integer.parseInt(args[4]);
+    String model = args[5];
 
 
     String brokerHost = "192.168.1.152";
@@ -45,9 +46,10 @@ public class RunClient {
 
     if (protocolType.equals("amqp")) {
       protocol = new AMQPPubSub("test", "test", brokerHost, "pubsub");
-    } else if (protocolType.equals("mqtt")) {
+    } else if (protocolType.substring(0, 4).equals("mqtt")) {
       String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-      protocol = new MQTTPubSub(timestamp, brokerHost, 2);
+      int qos = Integer.parseInt(protocolType.substring(4, 5));
+      protocol = new MQTTPubSub(timestamp, brokerHost, qos);
     } else if (protocolType.equals("xmpp")) {
       // the broker host here must be the HOSTNAME, not the ip address
       if (isSubscriber) {
@@ -64,10 +66,19 @@ public class RunClient {
     
     protocol.connectToBroker();
 
-    //telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
-    //sendOneMessage(isSubscriber, topic, messageSize); 
-    //sendMessages(isSubscriber, topic, messageSize, totalTime);
-    onOffModel(isSubscriber, topic, messageSize, totalTime, 5000, 10000);
+    if (model.equals("onoff")) {
+      onOffModel(isSubscriber, topic, messageSize, totalTime, 5000, 10000);
+    } else if (model.equals("telemetry")) {
+      telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
+    } else if (model.equals("fast")) {
+      sendMessages(isSubscriber, topic, messageSize, totalTime);
+    } else if (model.equals("one")) {
+      sendOneMessage(isSubscriber, topic, messageSize); 
+    } else {
+      log.debug("Invalid Model. Quitting...");
+      System.exit(-1);
+    }
+
   }
 
   private static void onOffModel(boolean isSubscriber, String topic, int messageSize, int totalTime, int onInterval, int offInterval) throws InterruptedException {
@@ -102,7 +113,7 @@ public class RunClient {
         if (isSwitchOn) {
           totalDataSent += message.length();
           protocol.publish(message, topic);
-          if (onTs + onInterval > System.currentTimeMillis()) {
+          if (onTs + onInterval < System.currentTimeMillis()) {
             isSwitchOn = false;
             offTs = System.currentTimeMillis();
           }
@@ -111,7 +122,7 @@ public class RunClient {
           log.debug("Sleeping...");
           long sleepTime = (long) (offInterval / 10);
           Thread.sleep(sleepTime);
-          if (offTs + offInterval > System.currentTimeMillis()) {
+          if (offTs + offInterval < System.currentTimeMillis()) {
             isSwitchOn = true;
             onTs = System.currentTimeMillis();
           }

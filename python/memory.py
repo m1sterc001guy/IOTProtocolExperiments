@@ -36,6 +36,7 @@ if __name__ == "__main__":
     pubOrSub = 'pub'
   else:
     pubOrSub = 'sub'
-  f = open('data/' + sys.argv[1] + '_memory_' + pubOrSub, 'w')
+  f = open('data/' + sys.argv[1] + '_memory_' + pubOrSub + "_" + sys.argv[4], 'w')
   outputMemory()
-  threading.Timer(60, closeFile).start() 
+  totalTime = int(sys.argv[3])
+  threading.Timer(totalTime, closeFile).start() 
