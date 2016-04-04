@@ -27,7 +27,7 @@ public class RunClient {
   private static TimerTask switchToOffTask;
 
   public static void main(String[] args) throws InterruptedException {
-    if (args.length != 5) {
+    if (args.length != 6) {
       log.error("Insufficient number of arguments. Quitting...");
       System.exit(-1);
     }
