@@ -67,7 +67,7 @@ public class RunClient {
     //telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
     //sendOneMessage(isSubscriber, topic, messageSize); 
     //sendMessages(isSubscriber, topic, messageSize, totalTime);
-    onOffModel(isSubscriber, topic, messageSize, totalTime, 300 * 1000, 300 * 1000);
+    onOffModel(isSubscriber, topic, messageSize, totalTime, 5000, 10000);
   }
 
   private static void onOffModel(boolean isSubscriber, String topic, int messageSize, int totalTime, int onInterval, int offInterval) throws InterruptedException {
@@ -85,39 +85,36 @@ public class RunClient {
         }
       }, totalTime * 1000);
 
+      /*
       Timer flipTimer = new Timer();
-      switchToOffTask = new TimerTask() {
+      flipTimer.scheduleAtFixedRate(new TimerTask() {
         @Override
         public void run() {
-          if (keepSendingMessages) {
-            isSwitchOn = false;
-            flipTimer.cancel();
-            flipTimer.schedule(switchToOnTask, offInterval);
-          }
+          isSwitchOn = !isSwitchOn;
         }
-      };
+      }, onInterval, onInterval);
+      */
 
-      switchToOnTask = new TimerTask() {
-        @Override
-        public void run() {
-          if (keepSendingMessages) {
-            isSwitchOn = true;
-            flipTimer.cancel();
-            flipTimer.schedule(switchToOffTask, onInterval);
-          }
-        }
-      };
-
-      flipTimer.schedule(switchToOffTask, onInterval);
+      long onTs = System.currentTimeMillis();
+      long offTs = System.currentTimeMillis();
 
       while(keepSendingMessages) {
         if (isSwitchOn) {
           totalDataSent += message.length();
           protocol.publish(message, topic);
+          if (onTs + onInterval > System.currentTimeMillis()) {
+            isSwitchOn = false;
+            offTs = System.currentTimeMillis();
+          }
         } else {
           // sleep for a period of time to not waste CPU
+          log.debug("Sleeping...");
           long sleepTime = (long) (offInterval / 10);
           Thread.sleep(sleepTime);
+          if (offTs + offInterval > System.currentTimeMillis()) {
+            isSwitchOn = true;
+            onTs = System.currentTimeMillis();
+          }
         }
       }
       protocol.close();
