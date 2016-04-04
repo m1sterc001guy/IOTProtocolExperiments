@@ -96,7 +96,6 @@ public class MQTTPubSub implements IPubSub, MqttCallback {
 
   @Override
   public void deliveryComplete(IMqttDeliveryToken token) {
-    log.debug("MQTT Delivery Complete.");
   }
 
   @Override

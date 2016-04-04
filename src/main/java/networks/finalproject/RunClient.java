@@ -18,6 +18,7 @@ public class RunClient {
 
   private static IPubSub protocol = null;
   private static boolean keepSendingMessages = true;
+  private static long totalDataSent = 0;
 
   public static void main(String[] args) {
     if (args.length != 5) {
@@ -32,7 +33,7 @@ public class RunClient {
     int totalTime = Integer.parseInt(args[4]);
 
 
-    String brokerHost = "192.168.1.228";
+    String brokerHost = "192.168.1.152";
     String brokerHostName = "justinsdell";
     final String topic = "topic";
 
@@ -76,10 +77,12 @@ public class RunClient {
       }, totalTime * 1000);
 
       while (keepSendingMessages) {
+        totalDataSent += message.length();
         protocol.publish(message, topic);
       }
 
       protocol.close();
+      log.debug("Total Data Sent: " + totalDataSent);
     }
   }
 
