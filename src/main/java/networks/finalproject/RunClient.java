@@ -87,27 +87,10 @@ public class RunClient {
     } else {
       final String message = getRandomMessage(messageSize);
 
-      // schedule timers here
-      Timer stopTimer = new Timer();
-      stopTimer.schedule(new TimerTask() {
-        @Override
-        public void run() {
-          keepSendingMessages = false;
-        }
-      }, totalTime * 1000);
-
-      /*
-      Timer flipTimer = new Timer();
-      flipTimer.scheduleAtFixedRate(new TimerTask() {
-        @Override
-        public void run() {
-          isSwitchOn = !isSwitchOn;
-        }
-      }, onInterval, onInterval);
-      */
-
       long onTs = System.currentTimeMillis();
       long offTs = System.currentTimeMillis();
+      long startTs = System.currentTimeMillis();
+      long totalTimeMillis = (long) (totalTime * 1000);
 
       while(keepSendingMessages) {
         if (isSwitchOn) {
@@ -127,6 +110,9 @@ public class RunClient {
             onTs = System.currentTimeMillis();
           }
         }
+        if (System.currentTimeMillis() > startTs + totalTimeMillis) {
+          keepSendingMessages = false;
+        }
       }
       protocol.close();
       log.debug("Total Data Sent: " + totalDataSent);
@@ -139,17 +125,16 @@ public class RunClient {
       protocol.subscribe(topic);
     } else {
       final String message = getRandomMessage(messageSize);
-      Timer timer = new Timer();
-      timer.schedule(new TimerTask() {
-        @Override
-        public void run() {
-          keepSendingMessages = false;
-        }
-      }, totalTime * 1000);
+
+      long startTs = System.currentTimeMillis();
+      long totalTimeMillis = (long) (totalTime * 1000);
 
       while (keepSendingMessages) {
         totalDataSent += message.length();
         protocol.publish(message, topic);
+        if (System.currentTimeMillis() > startTs + totalTimeMillis) {
+          keepSendingMessages = false;
+        }
       }
 
       protocol.close();

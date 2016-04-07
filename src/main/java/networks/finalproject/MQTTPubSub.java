@@ -20,9 +20,11 @@ public class MQTTPubSub implements IPubSub, MqttCallback {
   private MqttClient client;
   private MqttConnectOptions connOpts;
   private int qualityOfService;
+  private long dataReceived;
 
   public MQTTPubSub(String username, String brokerHost, int qualityOfService) {
     try {
+      dataReceived = 0;
       this.qualityOfService = qualityOfService;
       memory = new MemoryPersistence();
       String brokerTcpString = "tcp://" + brokerHost + ":1883";
@@ -100,6 +102,8 @@ public class MQTTPubSub implements IPubSub, MqttCallback {
 
   @Override
   public void messageArrived(String topic, MqttMessage message) throws Exception {
-    log.debug("Received '" + topic + "':'" + new String(message.getPayload()) + "'");    
+    dataReceived += message.getPayload().length;
+    log.debug("Data Received: " + dataReceived);
+    //log.debug("Received '" + topic + "':'" + new String(message.getPayload()) + "'");    
   }
 }

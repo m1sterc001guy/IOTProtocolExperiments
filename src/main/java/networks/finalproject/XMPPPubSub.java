@@ -16,6 +16,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 
@@ -29,8 +30,10 @@ public class XMPPPubSub implements IPubSub {
   private String password;
   private boolean isSubscriber;
   private String brokerHost;
+  private long dataReceived;
 
   public XMPPPubSub(String username, String password, String brokerHost, boolean isSubscriber) {
+    this.dataReceived = 0;
     this.username = username;
     this.password = password;
     this.isSubscriber = isSubscriber;
@@ -76,7 +79,9 @@ public class XMPPPubSub implements IPubSub {
   @Override
   public void subscribe(String topic) {
     xmppClient.addInboundMessageListener(e -> {
-      log.debug("Received '" + topic + "':'" + e.getMessage());
+      dataReceived += e.getMessage().getBody().length();
+      log.debug("Data Received: " + dataReceived);
+      //log.debug("Received '" + topic + "':'" + e.getMessage());
     });
 
     try {
