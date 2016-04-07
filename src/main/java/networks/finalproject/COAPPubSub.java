@@ -66,7 +66,7 @@ public class COAPPubSub implements IPubSub {
       public void onLoad(CoapResponse response) {
         dataReceived += response.getResponseText().length();
         log.debug("Data Received: " + dataReceived);
-        //log.debug(response.getResponseText()); 
+        log.debug(response.getResponseText()); 
       }
 
       @Override

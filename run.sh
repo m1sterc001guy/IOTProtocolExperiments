@@ -1,7 +1,7 @@
 time=180
 # Options: onoff, telemetry, fast, one
-model=one
-data=1000
+model=fast
+data=100000
 python python/cpu.py $1 $2 $time $model $data &
 python python/memory.py $1 $2 $time $model $data &
 # timer interval (CMD ARG 3) is in milliseconds, other parameters are in seconds
