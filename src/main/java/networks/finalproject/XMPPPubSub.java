@@ -31,9 +31,11 @@ public class XMPPPubSub implements IPubSub {
   private boolean isSubscriber;
   private String brokerHost;
   private long dataReceived;
+  private int numMessagesReceived;
 
   public XMPPPubSub(String username, String password, String brokerHost, boolean isSubscriber) {
     this.dataReceived = 0;
+    this.numMessagesReceived = 0;
     this.username = username;
     this.password = password;
     this.isSubscriber = isSubscriber;
@@ -80,7 +82,9 @@ public class XMPPPubSub implements IPubSub {
   public void subscribe(String topic) {
     xmppClient.addInboundMessageListener(e -> {
       dataReceived += e.getMessage().getBody().length();
+      numMessagesReceived++;
       log.debug("Data Received: " + dataReceived);
+      log.debug("Num Messages: " + numMessagesReceived);
       //log.debug("Received '" + topic + "':'" + e.getMessage());
     });
 

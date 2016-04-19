@@ -22,6 +22,7 @@ public class AMQPPubSub implements IPubSub {
   private Channel channel;
   private String exchangeName;
   private long dataReceived;
+  private int numMessagesReceived;
 
   public AMQPPubSub(String username, String password, String brokerHost, String exchangeName) {
     this.exchangeName = exchangeName;
@@ -30,6 +31,7 @@ public class AMQPPubSub implements IPubSub {
     factory.setPassword(password);
     factory.setHost(brokerHost);
     dataReceived = 0;
+    numMessagesReceived = 0;
   }
 
   @Override
@@ -72,7 +74,9 @@ public class AMQPPubSub implements IPubSub {
             AMQP.BasicProperties properties, byte[] body) throws IOException {
           String message = new String(body, "UTF-8");
           dataReceived += message.length();
+          numMessagesReceived++;
           log.debug("Data Received: " + dataReceived);
+          log.debug("Num Messages: " + numMessagesReceived);
           //log.debug("Received '" + envelope.getRoutingKey() + "':'" + message + "'");
         }
       };
