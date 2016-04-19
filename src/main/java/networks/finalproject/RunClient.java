@@ -57,8 +57,9 @@ public class RunClient {
       } else {
         protocol = new XMPPPubSub("raspberrypi", "raspberrypi", brokerHostName, isSubscriber);
       }
-    } else if (protocolType.equals("coap")) {
-      protocol = new COAPPubSub(brokerHost);
+    } else if (protocolType.substring(0, 4).equals("coap")) {
+      int qos = Integer.parseInt(protocolType.substring(4, 5));
+      protocol = new COAPPubSub(brokerHost, qos);
     } else {
       log.debug("Unknown Protocol. Quitting...");
       System.exit(-1);
@@ -67,7 +68,7 @@ public class RunClient {
     protocol.connectToBroker();
 
     if (model.equals("onoff")) {
-      onOffModel(isSubscriber, topic, messageSize, totalTime, 5000, 10000);
+      onOffModel(isSubscriber, topic, messageSize, totalTime, 10000, 10000);
     } else if (model.equals("telemetry")) {
       telemetryPattern(isSubscriber, topic, timeInterval, messageSize, totalTime);
     } else if (model.equals("fast")) {
@@ -97,6 +98,7 @@ public class RunClient {
           totalDataSent += message.length();
           protocol.publish(message, topic);
           if (onTs + onInterval < System.currentTimeMillis()) {
+            log.debug("OFF");
             isSwitchOn = false;
             offTs = System.currentTimeMillis();
           }
@@ -106,6 +108,7 @@ public class RunClient {
           long sleepTime = (long) (offInterval / 10);
           Thread.sleep(sleepTime);
           if (offTs + offInterval < System.currentTimeMillis()) {
+            log.debug("ON");
             isSwitchOn = true;
             onTs = System.currentTimeMillis();
           }

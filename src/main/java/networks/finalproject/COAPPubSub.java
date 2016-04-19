@@ -21,8 +21,9 @@ public class COAPPubSub implements IPubSub {
   private String brokerHost;
   private CoapObserveRelation relation;
   private long dataReceived;
+  private int qos;
 
-  public COAPPubSub(String brokerHost) {
+  public COAPPubSub(String brokerHost, int qos) {
     dataReceived = 0;
     clients = new HashMap<String, CoapClient>();
     this.brokerHost = brokerHost;
@@ -45,6 +46,11 @@ public class COAPPubSub implements IPubSub {
       client = new CoapClient(brokerHost + "/" + topic);
       clients.put(topic, client);
     }
+    if (qos == 1) {
+      client.useCONs();
+    } else {
+      client.useNONs();
+    }
 
     client.put(message, 0);
     return true;
@@ -66,7 +72,7 @@ public class COAPPubSub implements IPubSub {
       public void onLoad(CoapResponse response) {
         dataReceived += response.getResponseText().length();
         log.debug("Data Received: " + dataReceived);
-        log.debug(response.getResponseText()); 
+        //log.debug(response.getResponseText()); 
       }
 
       @Override
