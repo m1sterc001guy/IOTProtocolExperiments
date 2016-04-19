@@ -1,6 +1,6 @@
 time=180
 # Options: onoff, telemetry, fast, one
-model=fast
+model=telemetry
 data=1000
 python python/cpu.py $1 $2 $time $model $data &
 python python/memory.py $1 $2 $time $model $data &

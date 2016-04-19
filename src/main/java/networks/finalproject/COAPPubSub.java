@@ -87,6 +87,7 @@ public class COAPPubSub implements IPubSub {
     } catch (IOException e) {
       log.error("IOException occurred when reading from the console.", e);
     }
+    log.debug("Data Received: " + dataReceived);
   }
 
   @Override
