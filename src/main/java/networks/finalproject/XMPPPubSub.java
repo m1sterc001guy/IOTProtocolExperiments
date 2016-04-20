@@ -84,7 +84,7 @@ public class XMPPPubSub implements IPubSub {
       dataReceived += e.getMessage().getBody().length();
       numMessagesReceived++;
       log.debug("Data Received: " + dataReceived);
-      log.debug("Num Messages: " + numMessagesReceived);
+      //log.debug("Num Messages: " + numMessagesReceived);
       //log.debug("Received '" + topic + "':'" + e.getMessage());
     });
 

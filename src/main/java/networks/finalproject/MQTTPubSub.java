@@ -107,7 +107,7 @@ public class MQTTPubSub implements IPubSub, MqttCallback {
     dataReceived += message.getPayload().length;
     numMessagesReceived++;
     log.debug("Data Received: " + dataReceived);
-    log.debug("Num Messages: " + numMessagesReceived);
+    //log.debug("Num Messages: " + numMessagesReceived);
     //log.debug("Received '" + topic + "':'" + new String(message.getPayload()) + "'");    
   }
 }

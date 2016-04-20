@@ -75,7 +75,7 @@ public class COAPPubSub implements IPubSub {
         dataReceived += response.getResponseText().length();
         numMessagesReceived++;
         log.debug("Data Received: " + dataReceived);
-        log.debug("Num Messages: " + numMessagesReceived);
+        //log.debug("Num Messages: " + numMessagesReceived);
         //log.debug(response.getResponseText()); 
       }
 

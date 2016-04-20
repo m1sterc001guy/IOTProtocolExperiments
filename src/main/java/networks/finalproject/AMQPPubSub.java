@@ -76,7 +76,7 @@ public class AMQPPubSub implements IPubSub {
           dataReceived += message.length();
           numMessagesReceived++;
           log.debug("Data Received: " + dataReceived);
-          log.debug("Num Messages: " + numMessagesReceived);
+          //log.debug("Num Messages: " + numMessagesReceived);
           //log.debug("Received '" + envelope.getRoutingKey() + "':'" + message + "'");
         }
       };
